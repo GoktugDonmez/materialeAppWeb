@@ -1,0 +1,67 @@
+
+
+/* Set a background color for the body */
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header with flexbox */
+header {
+    background-color: #3498db;
+    color: white;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#header-nav li{
+    list-style: none;
+    display: inline;
+}
+
+#main-nav li{
+    list-style: none;
+
+}
+
+.container{
+    display: flex;
+}
+
+#main-nav{
+    flex: 1;
+}
+
+main{
+    flex:2;
+}
+
+
+
+.postId{
+    max-width: 20%;
+    max-height: 20%;
+}
+
+
+.profilePicture{
+    max-width: 10%;
+    max-height: 10%;
+}
+
+
+.new-post-button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
