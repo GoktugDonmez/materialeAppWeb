@@ -1,0 +1,50 @@
+.mynavbar {
+    background-color: turquoise;
+    height: 5rem;
+}
+
+.usrimg{
+    height: 50px;
+}
+
+#myheaderid h1{
+    color: rgb(130, 32, 32);
+} 
+
+#myaside ul{
+    list-style: none;
+}
+
+.mybutton {
+    background-color: #04AA6D;
+    border: none;
+    border-radius: 50%;
+    bottom: 30px;
+    color: white;
+    height: 60px;
+    position: fixed;
+    right: 30px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 60px;
+}
+
+
+
+@media (max-width: 991.98px) {
+
+    #myaside ul {
+        display: flex;
+        justify-content: space-between;
+        list-style-type: none;
+        padding: 0rem 1rem;
+    }
+
+    aside li {
+        display: inline;
+        list-style-type: none;
+        padding: 0em;
+        width: fit-content;
+    }
+}
