@@ -1,0 +1,75 @@
+{% extends "base.html"%}
+{% block title%}Post: {{post.id}}{%endblock%}
+{% block home_active %}active{% endblock %}
+
+
+{% block content%}
+
+
+<div class="container-fluid mt-6">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 col-md-12">
+            <article class="row border p-2 mx-1 my-4">
+                <div class="col-lg-3 col-md-6 col-sm-12 px-0">
+                    <img class="w-100 p-2" src="{{ url_for('static', filename=post.post_pic) }}" alt="..."></a>
+                </div>
+                <div class="col-lg-9 col-md-6 col-sm-12">
+                    <section class="d-flex align-items-center mt-2 mb-4">
+                        <div><img class="usrimg rounded-circle" src="{{ url_for('static', filename=post.user_pic)}}"
+                                alt="Questa è l'immagine dell'utente @{{post.username}}"></div>
+                        <div>
+                            <h4 class="username">{{post.username}}</h4>
+                        </div>
+                        <div class="flex-grow-1 text-end">
+                            <p>{{post.post_date}}</p>
+                        </div>
+                    </section>
+
+                    <p class="post-text">{{post.text}}</p>
+                    </p>
+                    
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 col-md-12">
+            <section class="bg-light">
+            <h2 class="mb-4">Comments</h2>
+            <!-- Comment Item -->
+            <div class="row mb-3">
+                <div class="col-2 col-md-1">
+                    <img src="{{ url_for('static', filename=post.user_pic)}}" alt="user avatar" class="rounded-circle" style="width: 100%;">
+                </div>
+                <div class="col-10 col-md-11">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@juan</h5>
+                            <p class="card-text">Aliquam imperdiet odio at massa dictum, nec consequat mi fermentum. Mauris a euismod nulla. Nunc tristique in orci ut finibus. Duis vel est sit amet metus finibus sagittis. In orci tellus, pretium vitae volutpat in, auctor sagittis est. Donec faucibus vel massa sed efficitur.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-2 col-md-1">
+                    <img src="{{ url_for('static', filename=post.user_pic)}}" alt="user avatar" class="rounded-circle" style="width: 100%;">
+                </div>
+                <div class="col-10 col-md-11">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@gok2</h5>
+                            <p class="card-text">Aliquam imperdiet odio at massa dictum, nec consequat mi fermentum. Mauris a euismod nulla. Nunc tristique in orci ut finibus. Duis vel est sit amet metus finibus sagittis. In orci tellus, pretium vitae volutpat in, auctor sagittis est. Donec faucibus vel massa sed efficitur.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat for more comments -->
+        </section>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
