@@ -13,14 +13,19 @@ devs =[{ 'dev_id': 1,'devName': 'Gok2', 'quote': 'Tayyibi sikeyim', 'devPic': 'u
        {'dev_id': 2,'devName': 'Sezin', 'quote': 'Romaya gider miyiz', 'devPic': 'user.jpg'}
        ]
 
-usernames = [post['username'] for post in posts]
+comments = [
+    {'id':0, 'postid': 1, 'rate':4, 'usrname':'Can', 'usrimg': 'user.jpg', 'comment': 'Lorem ipsum dobh sed viverraSed sapien lectus, aliquam ac ornare sed, dapibus pulvinar ligula. Ut ultrices a nibh eget el sit amet felis cursus rutrum.'}, 
+    {'id':1, 'postid': 1, 'rate':3, 'usrname':'Can', 'usrimg': 'user.jpg', 'comment': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tristique lobortis molestie. Donec laoreet iaculis nibh sed viverra. Nunc condimentum tincidunt mollis. Curabitur gravida aliquam urna, ac vulputate felis condimentum at. Sed sapien lectus, aliquam ac ornare sed, dapibus pulvinar ligula. Ut ultrices a nibh eget eleifend. Nullam eleifend metus nec erat vestibulum venenatis ornare sed orci. Donec vel sapien sit amet felis cursus rutrum.', 'img':'img3.jpg'}
+]
 
+usernames = [post['username'] for post in posts]
+postIds = [post['id'] for post in posts]
 
 @app.context_processor
 def inject_usernames_and_date():
     usernames = set([post['username'] for post in posts])
     today_date = date.today().isoformat()
-    return dict(usernames=usernames,todayDate=today_date)
+    return dict(usernames=usernames,todayDate=today_date,comments=comments)
 
 @app.route("/")
 def home():
@@ -42,6 +47,19 @@ def post(post_id):
 
 @app.route('/post/new', methods=['POST'])
 def new_post():
+    """
+    Create a new post.
+
+    This function is called when a POST request is made to the '/post/new' endpoint.
+    It validates the post data and saves the post to the database.
+
+    Returns:
+        redirect: A redirect response to the 'home' endpoint.
+
+    Raises:
+        KeyError: If any required field is missing in the post data.
+        ValueError: If the post data is invalid.
+    """
     
     post  = request.form.to_dict()
 
@@ -76,6 +94,39 @@ def new_post():
     app.logger.info('Post creato con successo', post,posts)
     
     return redirect(url_for('home'))
+
+
+@app.route('/comments/new', methods=['POST'])
+def new_comment():
+            
+    comment = request.form.to_dict()
+
+    if 'isAnonymous' in comment and comment['isAnonymous'] == 'on':
+        comment['usrname'] = '@anonymous'
+        comment['usrimg'] = 'anonymous.png'
+    elif comment['usrname'] not in [d['username'] for d in posts]:
+        app.logger.error("Non esiste l'utente!")
+        return redirect(url_for('home'))
+    else:
+        comment['usrimg'] = [p['user_pic'] for p in posts if p['username'] == comment['usrname']][0]
+    
+    if comment['comment'] == '':
+        app.logger.error('Il commento non può essere vuoto!')
+        return redirect(url_for('home'))
+    
+    comment_image = request.files['image']
+    if comment_image:
+        comment_image.save('static/' + comment_image.filename)
+        comment['img'] = comment_image.filename
+            
+    comment['id'] = comments[-1]['id'] + 1
+    comment['postid'] = int(comment['postid'])
+    comment['rate'] = int(comment['radioOptions'])
+    
+    comments.append(comment)
+    print('Commento creato con successo', comment, comments)
+    print('ananiskim')
+    return redirect(url_for('post', post_id=int(comment['postid'])))
 
 
 
