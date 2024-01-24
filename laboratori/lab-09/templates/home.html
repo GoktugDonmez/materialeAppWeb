@@ -1,0 +1,102 @@
+{%extends "base.html"%}
+{%block title%}Home{%endblock%}
+{%block home_active%}active{%endblock%}
+{%block content%} 
+
+<aside id="myaside" class="col-lg-3 col-md-12">
+    <ul>
+        <li>
+            <a class="link-primary" href="#">Oggi</a>
+        </li>
+        <li>
+            <a class="link-primary" href="#">Questa settimana</a>
+        </li>
+        <li> 
+            <a class="link-primary" href="#">Questo mese</a>
+        </li>
+    </ul>
+</aside>
+
+<div class="col-lg-9 col-md-12">
+    {% for post in posts %}
+    <a href="{{url_for('post', post_id=post.id)}}" class="post-link">
+    <article class="row border p-2 mx-2 my-4">
+        {% if post.post_img != None %}
+        <div class="col-lg-4 col-md-6 col-sm-12 px-0">
+            <img class="w-100 p-2" src="{{url_for('static', filename=post.post_img)}}" alt="...">
+        </div>
+        {% endif %}
+        <div class="col-lg-8 col-md-6 col-sm-12">
+            <section class="d-flex align-items-center mt-2 mb-4">
+                {% if post.usr_id != None %}
+                <div><img class="usrimg rounded-circle" src="{{url_for('static', filename=post.user_img)}}"
+                        alt="Questa è l'immagine dell'utente {{post.username}}"></div>
+                {% endif %}
+                <div>
+                    <h4 class="username">{{post.username}}</h4>
+                </div>
+                <div class="flex-grow-1 text-end">
+                    <p>{{post.data_publication}}</p>
+                </div>
+            </section>
+            <p class="post-text"> {{post.post_text}}</p>
+        </div>
+    </article>
+</a>
+
+    
+    {% endfor %}
+
+</div>
+
+<button type="button" class="btn btn-lg mybutton" data-bs-toggle="modal" data-bs-target="#exampleModal"> + </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Crea un nuovo post</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form structure -->
+                            <form action="/post/new" method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="txtuserName" class="form-label">Choose a user:</label>
+                                    <select class="form-select" name="username" id="txtuserName">
+                                        <option selected>Select user</option>
+                                        {% for user in users %}
+                                        <option value="{{user}}">{{user.username}}</option>
+                                        {% endfor %}
+                                        
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="txtPost" class="form-label">Content:</label>
+                                    <textarea class="form-control" id="txtPost" name="post_text" rows="3" 
+                                    required minlength="30" maxlength="200"
+                                    placeholder="inserisci un testo per il tuo post"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fileInput" class="form-label">Agguingu un immagine, opzionale</label>
+                                    <input class="form-control" type="file" name="post_img" id="fileInput">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dateInput" class="form-label">Scegli data:</label>
+                                    <input class="form-control" type="date" name="data_publication" id="dateInput" min="{{ todayDate }}">
+                                </div>
+                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                <button type="submit" class="btn btn-primary">Crea post</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+{% endblock %}
