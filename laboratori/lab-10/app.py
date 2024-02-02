@@ -2,9 +2,29 @@ from flask import Flask, render_template, url_for, request,redirect
 from datetime import date, datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
+from model import User
 import postDBinteraction, userDBinteraction, commentDBinteraction
 
+# Configuration for the Flask-Login extension
+
 app = Flask(__name__)
+
+app.config['SECRET_KEY'] =  'some value' # TODO: Change this!
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """
+    This function is used by Flask-Login to load a User object from the database given its id.
+    """
+    db_user = userDBinteraction.get_user(user_id)
+    user = User(db_user['id'], db_user['username'], db_user['password'],
+                 db_user['profile_pic'])
+
+    return user
 
 
 ###
@@ -15,6 +35,9 @@ app = Flask(__name__)
 #    return dict(usernames=usernames,todayDate=today_date,comments=comments)
 #
 ###
+
+
+
 @app.route("/")
 def home():
     posts_db = postDBinteraction.get_posts()
@@ -24,11 +47,9 @@ def home():
 
 @app.route("/about")
 def about():
-
     devs =[{ 'dev_id': 1,'devName': 'Gok2', 'quote': 'Tayyibi sikeyim', 'devPic': 'user_img.jpg'},
        {'dev_id': 2,'devName': 'Sezin', 'quote': 'Romaya gider miyiz', 'devPic': 'user_img.jpg'}
-           ]
-
+       ]
 
     return render_template('about.html', devs=devs)   
 
